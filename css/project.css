@@ -1,5 +1,13 @@
 /* ============================================================
    PROJECT PAGE — project.css  |  Maxime Bourgeot
+   CORRECTIONS :
+   - .feat-list : minmax(min(280px,100%),1fr) → no overflow mobile
+   - .ph-stats : gap clamp() → adaptatif tablette
+   - .scores-grid : breakpoint 900px ajouté (2 col tablette)
+   - .code-block : overflow-x:auto → pas de casse layout mobile
+   - .reveal → utilise .vis (cohérent avec app.js / style.css)
+   - cursor: coarse → curseur custom désactivé sur tactile
+   - Breakpoints complets : 900 / 600 / 520
 ============================================================ */
 
 /* ── Back link ── */
@@ -92,9 +100,10 @@
   margin-bottom: 3.5rem;
 }
 
+/* BUG 6 FIX : gap clamp() au lieu de gap fixe 3.5rem */
 .ph-stats {
   display: flex;
-  gap: 3.5rem;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
   padding: 2rem 0;
   border-top: 1px solid var(--border);
   flex-wrap: wrap;
@@ -126,7 +135,7 @@
   animation: pulse 2s infinite;
 }
 
-/* ── Section wrapper for project pages ── */
+/* ── Section wrapper ── */
 .pw { max-width: var(--max); margin: 0 auto; padding: 5rem var(--px); }
 
 /* ── Content blocks ── */
@@ -143,6 +152,7 @@
   font-size: .6rem;
   letter-spacing: .15em;
   color: var(--accent);
+  flex-shrink: 0;
 }
 .pb-title {
   font-family: var(--f-serif);
@@ -154,9 +164,7 @@
 .pb-title em { font-style: italic; color: var(--light); }
 
 /* ── Text blocks ── */
-.pb-text {
-  max-width: 680px;
-}
+.pb-text { max-width: 680px; }
 .pb-text p {
   font-size: .95rem;
   color: var(--light);
@@ -166,11 +174,22 @@
 .pb-text p:last-child { margin-bottom: 0; }
 .pb-text strong { color: var(--white); font-weight: 600; }
 
+/* ── inline code (dans du texte) ── */
+.inline-code {
+  font-family: var(--f-mono);
+  font-size: .85em;
+  color: var(--accent);
+  background: var(--bg2);
+  padding: .1em .4em;
+  border-radius: 2px;
+}
+
 /* ── Feature list ── */
+/* BUG 5 FIX : minmax(min(280px,100%),1fr) → jamais de overflow */
 .feat-list {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -238,9 +257,8 @@
   position: relative;
   overflow: hidden;
 }
-.mg-item.tall { aspect-ratio: 4/3; }
+.mg-item.tall   { aspect-ratio: 4/3; }
 .mg-item.square { aspect-ratio: 1; }
-
 .mg-item img {
   width: 100%; height: 100%;
   object-fit: cover;
@@ -249,7 +267,6 @@
 }
 .mg-item:hover img { transform: scale(1.03); }
 
-/* Placeholder quand pas d'image */
 .mg-placeholder {
   display: flex;
   flex-direction: column;
@@ -267,7 +284,6 @@
   text-transform: uppercase;
 }
 
-/* Caption sous media grid */
 .mg-caption {
   font-family: var(--f-mono);
   font-size: .6rem;
@@ -329,16 +345,11 @@
   letter-spacing: -.02em;
   margin-bottom: .5rem;
 }
-.cta-text p {
-  font-size: .9rem;
-  color: var(--mid);
-}
+.cta-text p { font-size: .9rem; color: var(--mid); }
 .cta-btns { display: flex; gap: .8rem; flex-wrap: wrap; }
 
 /* ── Next project ── */
-.next-project {
-  border-top: 1px solid var(--border);
-}
+.next-project { border-top: 1px solid var(--border); }
 .np-link {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -417,7 +428,8 @@
   line-height: 1.5;
 }
 
-/* ── Bloc code ── */
+/* ── Code block ── */
+/* BUG 7 FIX : overflow-x sur le conteneur + scroll tactile fluide */
 .code-block {
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -431,7 +443,7 @@
   border-bottom: 1px solid var(--border);
   background: var(--bg2);
 }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .d1 { background: #ff5f57; }
 .d2 { background: #febc2e; }
 .d3 { background: #28c840; }
@@ -442,6 +454,7 @@
   color: var(--muted);
   margin-left: auto;
 }
+/* overflow-x sur le pre directement pour scroll horizontal mobile */
 .code-body {
   margin: 0;
   padding: 1.75rem 2rem;
@@ -449,7 +462,10 @@
   font-size: .78rem;
   line-height: 1.9;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--bg);
+  white-space: pre;
+  word-break: keep-all;
 }
 .tok-comment { color: var(--muted); }
 .tok-key     { color: var(--accent); }
@@ -458,22 +474,57 @@
 .tok-str     { color: #9fe1cb; }
 .tok-punct   { color: var(--mid); }
 
-/* ── Responsive ── */
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+
+/* ── Tablette ≤ 900px ── */
 @media (max-width: 900px) {
+  /* BUG 4 FIX : scores-grid passe à 2 colonnes sur tablette */
+  .scores-grid { grid-template-columns: repeat(2, 1fr); }
+
   .media-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
   .media-grid.cols-2 { grid-template-columns: 1fr; }
   .cta-inner { flex-direction: column; }
   .np-link { grid-template-columns: 1fr; }
   .np-arr { display: none; }
+  .callout p { font-size: 1.1rem; }
 }
-@media (max-width: 600px) {
-  .scores-grid { grid-template-columns: repeat(2, 1fr); }
+
+/* ── Tablette portrait / grand mobile ≤ 640px ── */
+@media (max-width: 640px) {
+  .feat-list { margin-top: 1.5rem; }
+  .pb-header { gap: 1rem; margin-bottom: 2rem; }
+  .pw { padding: 4rem var(--px); }
+  .ph-inner { padding-bottom: 3.5rem; }
 }
+
+/* ── Mobile ≤ 520px ── */
 @media (max-width: 520px) {
   .ph { padding-top: calc(var(--nav-h) + 2rem); }
   .ph-inner { padding-bottom: 3rem; }
+  /* BUG 6 FIX + mobile : ph-stats en colonne sur très petit écran */
   .ph-stats { flex-direction: column; gap: 1.5rem; }
   .feat-list { grid-template-columns: 1fr; }
   .media-grid.cols-3 { grid-template-columns: 1fr; }
   .pw { padding: 3.5rem var(--px); }
+  /* scores : 1 colonne sur très petit mobile */
+  .scores-grid { grid-template-columns: repeat(2, 1fr); gap: .6rem; }
+  .score-card { padding: 1.5rem .75rem; }
+  .callout { padding: 1.2rem 1.4rem; }
+  .callout p { font-size: 1rem; }
+  .back-link { margin-bottom: 2.5rem; }
+  .np-link { padding: 2rem var(--px); }
+}
+
+/* ── Très petit mobile ≤ 380px ── */
+@media (max-width: 380px) {
+  .scores-grid { grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .code-body { padding: 1.25rem 1rem; font-size: .72rem; }
+}
+
+/* BUG 8 FIX : désactiver cursor custom sur écrans tactiles */
+@media (pointer: coarse), (hover: none) {
+  .cursor { display: none !important; }
+  body { cursor: auto !important; }
 }

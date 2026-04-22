@@ -1,8 +1,12 @@
 /* ============================================================
    PORTFOLIO — app.js  |  Maxime Bourgeot
    Script unifié (remplace main.js ET project.js)
+   CORRECTIONS :
    - Null checks sur chaque élément DOM avant usage
-   - Pas de double déclaration entre les deux anciens fichiers
+   - Curseur désactivé sur pointer:coarse (tactile)
+   - .vis utilisé pour reveal (cohérent avec style.css)
+   - Smooth scroll compatible pages projet (liens ../index.html#section)
+   - Fermeture menu burger robuste (Escape + clic overlay)
    - defer sur la balise <script> → pas besoin de DOMContentLoaded
 ============================================================ */
 (function () {
@@ -25,31 +29,47 @@
   /* ── Progress bar ── */
   const progressEl = document.getElementById('progress');
   if (progressEl) {
-    window.addEventListener('scroll', () => {
+    const updateProgress = () => {
       const h = document.documentElement;
-      const pct = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100;
-      progressEl.style.width = pct + '%';
-    }, { passive: true });
+      const scrollable = h.scrollHeight - h.clientHeight;
+      const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      progressEl.style.width = Math.min(pct, 100) + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
   }
 
-  /* ── Curseur personnalisé (pointer: fine uniquement) ── */
+  /* ── Curseur personnalisé
+       BUG 8 FIX : désactivé sur pointer:coarse (tactile) ── */
   const cursor = document.getElementById('cursor');
-  if (cursor && window.matchMedia('(pointer: fine)').matches) {
+  const isFinePointer = window.matchMedia('(pointer: fine) and (hover: hover)').matches;
+
+  if (cursor && isFinePointer) {
     cursor.style.display = 'block';
     let mx = -100, my = -100, cx = -100, cy = -100;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    }, { passive: true });
+
     (function loop() {
-      cx += (mx - cx);
-      cy += (my - cy);
+      cx += (mx - cx) * 0.18;
+      cy += (my - cy) * 0.18;
       cursor.style.transform = `translate(calc(${cx}px - 50%), calc(${cy}px - 50%))`;
       requestAnimationFrame(loop);
     })();
+
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
     document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
-    document.querySelectorAll('a, button, .fb, .pc').forEach(el => {
+
+    document.querySelectorAll('a, button, .fb, .pc, .feat-item, .score-card, .cr').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('big'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
     });
+  } else if (cursor) {
+    /* Sécurité : masquer explicitement sur tactile */
+    cursor.style.display = 'none';
   }
 
   /* ── Nav scroll ── */
@@ -64,16 +84,17 @@
   const sections = document.querySelectorAll('section[id]');
   const navAs    = document.querySelectorAll('.nav-links a');
   if (sections.length && navAs.length) {
-    sections.forEach(s =>
-      new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting)
-            navAs.forEach(a =>
-              a.classList.toggle('active', a.getAttribute('href') === `#${e.target.id}`)
-            );
-        });
-      }, { threshold: 0.4 }).observe(s)
-    );
+    const sectionObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navAs.forEach(a =>
+            a.classList.toggle('active', a.getAttribute('href') === `#${e.target.id}`)
+          );
+        }
+      });
+    }, { threshold: 0.35, rootMargin: '-60px 0px 0px 0px' });
+
+    sections.forEach(s => sectionObs.observe(s));
   }
 
   /* ── Hamburger menu mobile ── */
@@ -91,34 +112,54 @@
 
   if (burger && overlay) {
     burger.addEventListener('click', () => {
-      const open = burger.classList.toggle('open');
-      overlay.classList.toggle('open', open);
-      overlay.setAttribute('aria-hidden', String(!open));
-      burger.setAttribute('aria-expanded', String(open));
-      document.body.style.overflow = open ? 'hidden' : '';
+      const isOpen = burger.classList.toggle('open');
+      overlay.classList.toggle('open', isOpen);
+      overlay.setAttribute('aria-hidden', String(!isOpen));
+      burger.setAttribute('aria-expanded', String(isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
+
+    /* Fermer au clic sur un lien dans l'overlay */
     overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobile));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
+
+    /* Fermer sur Escape */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMobile();
+    });
+
+    /* Fermer au clic en dehors de l'overlay (sur le fond) */
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeMobile();
+    });
   }
 
-  /* ── Scroll reveal ── */
-  const revealObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('vis');
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  /* ── Scroll reveal
+       BUG 9 FIX : .vis (cohérent avec style.css, non .visible) ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length) {
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('vis');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+    revealEls.forEach(el => revealObs.observe(el));
+  }
 
   /* ── Filtre projets (index seulement) ── */
   const fBtns = document.querySelectorAll('.fb');
   const cards = document.querySelectorAll('.pc');
+
   if (fBtns.length && cards.length) {
     fBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        fBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+        fBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
         btn.setAttribute('aria-pressed', 'true');
 
@@ -146,15 +187,22 @@
     });
   }
 
-  /* ── Smooth anchor scroll ── */
+  /* ── Smooth anchor scroll
+       Fonctionne sur index.html ET sur les pages projet
+       (les liens ../index.html#section sont des navigations normales,
+       seuls les href="#xxx" sur la même page sont concernés) ── */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
+    const hash = a.getAttribute('href');
+    if (!hash || hash === '#') return;
+
     a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
+      const target = document.querySelector(hash);
       if (!target) return;
       e.preventDefault();
       closeMobile();
-      const top = target.getBoundingClientRect().top + window.scrollY - (nav?.offsetHeight ?? 60);
-      window.scrollTo({ top, behavior: 'smooth' });
+      const navH = nav ? nav.offsetHeight : 60;
+      const top = target.getBoundingClientRect().top + window.scrollY - navH;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     });
   });
 
@@ -169,12 +217,18 @@
 
   /* ── Copier l'email au clic ── */
   const copyEl = document.getElementById('copy-email');
-  if (copyEl && navigator.clipboard) {
+  if (copyEl) {
     copyEl.addEventListener('click', e => {
       e.preventDefault();
-      navigator.clipboard.writeText(copyEl.dataset.copy)
-        .then(() => showToast('Email copié ✓'))
-        .catch(() => { window.location.href = copyEl.href; });
+      const email = copyEl.dataset.copy || copyEl.href.replace('mailto:', '');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(email)
+          .then(() => showToast('Email copié ✓'))
+          .catch(() => { window.location.href = copyEl.href; });
+      } else {
+        /* Fallback pour navigateurs anciens */
+        window.location.href = copyEl.href;
+      }
     });
   }
 
