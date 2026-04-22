@@ -46,19 +46,10 @@
 
   if (cursor && isFinePointer) {
     cursor.style.display = 'block';
-    let mx = -100, my = -100, cx = -100, cy = -100;
 
     document.addEventListener('mousemove', e => {
-      mx = e.clientX;
-      my = e.clientY;
+      cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
     }, { passive: true });
-
-    (function loop() {
-      cx += (mx - cx) * 0.18;
-      cy += (my - cy) * 0.18;
-      cursor.style.transform = `translate(calc(${cx}px - 50%), calc(${cy}px - 50%))`;
-      requestAnimationFrame(loop);
-    })();
 
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
     document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
