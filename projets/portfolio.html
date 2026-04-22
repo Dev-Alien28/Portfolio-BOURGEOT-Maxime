@@ -3,23 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ce Portfolio — Maxime Bourgeot</title>
+  <title>Portfolio personnel — Maxime Bourgeot</title>
   <meta name="description" content="Portfolio personnel de Maxime Bourgeot — design & développement from scratch en HTML, CSS, JS vanilla. Déployé sur Vercel.">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Ce Portfolio — Maxime Bourgeot">
   <meta property="og:description" content="Design & développement from scratch — HTML, CSS, JS vanilla, Vercel.">
   <meta property="og:type" content="website">
 
-  <!-- BUG 1 FIX : preload depuis le bon chemin (dossier projets/ → ../fonts/) -->
   <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- BUG 2 FIX : style.css DOIT être chargé en premier (variables CSS globales) -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/project.css">
 
-  <!-- BUG 3 FIX : app.js unifié en defer (remplace l'ancien project.js inexistant) -->
   <script src="../js/app.js" defer></script>
+
+  <style>
+    /* ── Cercles Lighthouse dynamiques ── */
+    .score-ring svg circle.ring-track {
+      stroke: var(--bg2);
+    }
+
+    /* Couleurs selon score */
+    .score-ring svg circle.ring-fill[data-grade="great"] {
+      stroke: #4ade80; /* vert */
+    }
+    .score-ring svg circle.ring-fill[data-grade="good"] {
+      stroke: #facc15; /* orange/jaune */
+    }
+    .score-ring svg circle.ring-fill[data-grade="poor"] {
+      stroke: #f87171; /* rouge */
+    }
+
+    /* Valeur du score colorée aussi */
+    .score-card[data-grade="great"] .score-val { color: #4ade80; }
+    .score-card[data-grade="good"]  .score-val { color: #facc15; }
+    .score-card[data-grade="poor"]  .score-val { color: #f87171; }
+
+    /* Animation d'entrée de l'arc */
+    .ring-fill {
+      transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  </style>
 </head>
 <body>
 
@@ -40,7 +65,6 @@
     </button>
   </nav>
 
-  <!-- Mobile overlay : liens corrigés vers index.html#section -->
   <div class="mobile-overlay" id="mobile-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Menu navigation">
     <ul role="list">
       <li><a href="../index.html#apropos">À propos</a></li>
@@ -75,8 +99,8 @@
         </h1>
 
         <p class="ph-desc reveal-init" style="--d:.28s">
-          Design & développement from scratch. UI sobre et précise, animations fluides, 100&nbsp;% responsive.
-          Zéro framework, zéro dépendance — du HTML, CSS et JavaScript vanilla pur.
+        Design et développement from scratch. Interface sobre et précise, animations fluides et expérience 100&nbsp;% responsive.
+        Zéro framework, zéro dépendance — uniquement HTML, CSS et JavaScript vanilla pour un contrôle total et des performances optimales.
         </p>
 
         <div class="ph-chips reveal-init" style="--d:.36s">
@@ -111,17 +135,25 @@
     </section>
 
     <!-- ── DÉMARCHE ── -->
+    <!-- ── DÉMARCHE ── -->
     <section class="pb" aria-label="Démarche">
       <div class="pw">
         <div class="pb-header reveal">
           <span class="pb-num">01</span>
           <h2 class="pb-title">La <em>démarche</em></h2>
         </div>
+
         <div class="pb-text reveal" style="--reveal-delay:.07s">
-          <p>L'objectif était simple : construire un portfolio qui me ressemble, sans template, sans framework superflu. Chaque détail — typographie, espacements, animations, couleurs — a été décidé à la main.</p>
-          <p>Le choix du <strong>vanilla JS/CSS/HTML</strong> n'est pas une contrainte mais une décision : moins de dépendances = moins de surface d'attaque, moins de poids, plus de contrôle. Le site charge en une fraction de seconde.</p>
+          <p>
+            L’objectif était simple : concevoir un portfolio à mon image, sans template ni framework superflu.
+            Chaque détail — typographie, espacements, animations, couleurs — a été pensé et ajusté manuellement.
+          </p>
+          <p>
+            Le choix du vanilla JS, CSS et HTML est volontaire : moins de dépendances, c’est plus de contrôle, de meilleures performances et une sécurité renforcée.
+            Le site est ainsi rapide, léger et entièrement maîtrisé.
+          </p>
           <div class="callout">
-            <p>« Le meilleur framework, c'est parfois pas de framework. »</p>
+            <p>« Simplicité et contrôle restent souvent les meilleures optimisations. »</p>
           </div>
         </div>
       </div>
@@ -138,7 +170,7 @@
           <li class="feat-item reveal">
             <span class="feat-icon">[ Typo ]</span>
             <p class="feat-name">DM Serif Display</p>
-            <p class="feat-desc">Police serif élégante pour les titres — tranche nette, personnalité affirmée sans être agressive.</p>
+            <p class="feat-desc">Police serif élégante pour les titres — forte personnalité, lisible et distinctive sans être agressive.</p>
           </li>
           <li class="feat-item reveal" style="--reveal-delay:.06s">
             <span class="feat-icon">[ Couleur ]</span>
@@ -153,7 +185,7 @@
           <li class="feat-item reveal" style="--reveal-delay:.18s">
             <span class="feat-icon">[ Perf ]</span>
             <p class="feat-name">Zéro bundle, zéro overhead</p>
-            <p class="feat-desc">Pas de build step, pas de node_modules. Juste des fichiers statiques servis directement depuis Vercel's CDN.</p>
+            <p class="feat-desc">Aucun framework ni dépendance lourde — uniquement des fichiers statiques optimisés, servis directement via le CDN de Vercel pour un chargement rapide et constant.</p>
           </li>
         </ul>
       </div>
@@ -167,7 +199,10 @@
           <h2 class="pb-title">Sécurité <em>renforcée</em></h2>
         </div>
         <div class="pb-text reveal" style="--reveal-delay:.07s">
-          <p>Le site est sécurisé via les headers HTTP de Vercel configurés dans <code class="inline-code">vercel.json</code>. La liste complète des protections mises en place :</p>
+          <p>
+            Le site est sécurisé via des headers HTTP configurés sur Vercel.
+            Ces protections permettent de limiter les risques d’attaques côté navigateur et de garantir des connexions sûres.
+          </p>
         </div>
         <ul class="feat-list" role="list">
           <li class="feat-item reveal">
@@ -203,57 +238,118 @@
           <h2 class="pb-title">Scores <em>Lighthouse</em></h2>
         </div>
 
-        <!-- BUG 4 FIX : scores-grid géré par project.css corrigé (breakpoints 900 et 520) -->
+        <!--
+          data-score  : valeur 0-100
+          Couleur auto : ≥ 90 → vert, ≥ 50 → jaune, < 50 → rouge
+          Arc auto     : stroke-dashoffset = 163.4 × (1 - score/100)
+          Tout est calculé par le script inline en bas de section.
+        -->
         <div class="scores-grid reveal" style="--reveal-delay:.07s">
-          <div class="score-card">
+
+          <div class="score-card" data-score="100">
             <div class="score-ring">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <circle cx="32" cy="32" r="26" stroke="var(--bg2)" stroke-width="4"/>
-                <circle cx="32" cy="32" r="26" stroke="var(--accent)" stroke-width="4"
-                  stroke-linecap="round" stroke-dasharray="163.4"
-                  stroke-dashoffset="1.6" transform="rotate(-90 32 32)"/>
+                <circle class="ring-track" cx="32" cy="32" r="26" stroke-width="4"/>
+                <circle class="ring-fill"  cx="32" cy="32" r="26" stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-dasharray="163.4"
+                  stroke-dashoffset="163.4"
+                  transform="rotate(-90 32 32)"/>
               </svg>
-              <span class="score-val">99</span>
+              <span class="score-val"></span>
             </div>
             <span class="score-label">Performance</span>
           </div>
-          <div class="score-card">
+
+          <div class="score-card" data-score="96">
             <div class="score-ring">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <circle cx="32" cy="32" r="26" stroke="var(--bg2)" stroke-width="4"/>
-                <circle cx="32" cy="32" r="26" stroke="var(--accent)" stroke-width="4"
-                  stroke-linecap="round" stroke-dasharray="163.4"
-                  stroke-dashoffset="0" transform="rotate(-90 32 32)"/>
+                <circle class="ring-track" cx="32" cy="32" r="26" stroke-width="4"/>
+                <circle class="ring-fill"  cx="32" cy="32" r="26" stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-dasharray="163.4"
+                  stroke-dashoffset="163.4"
+                  transform="rotate(-90 32 32)"/>
               </svg>
-              <span class="score-val">100</span>
+              <span class="score-val"></span>
             </div>
             <span class="score-label">Accessibilité</span>
           </div>
-          <div class="score-card">
+
+          <div class="score-card" data-score="77">
             <div class="score-ring">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <circle cx="32" cy="32" r="26" stroke="var(--bg2)" stroke-width="4"/>
-                <circle cx="32" cy="32" r="26" stroke="var(--accent)" stroke-width="4"
-                  stroke-linecap="round" stroke-dasharray="163.4"
-                  stroke-dashoffset="0" transform="rotate(-90 32 32)"/>
+                <circle class="ring-track" cx="32" cy="32" r="26" stroke-width="4"/>
+                <circle class="ring-fill"  cx="32" cy="32" r="26" stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-dasharray="163.4"
+                  stroke-dashoffset="163.4"
+                  transform="rotate(-90 32 32)"/>
               </svg>
-              <span class="score-val">100</span>
+              <span class="score-val"></span>
             </div>
             <span class="score-label">Bonnes pratiques</span>
           </div>
-          <div class="score-card">
+
+          <div class="score-card" data-score="100">
             <div class="score-ring">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <circle cx="32" cy="32" r="26" stroke="var(--bg2)" stroke-width="4"/>
-                <circle cx="32" cy="32" r="26" stroke="var(--accent)" stroke-width="4"
-                  stroke-linecap="round" stroke-dasharray="163.4"
-                  stroke-dashoffset="0" transform="rotate(-90 32 32)"/>
+                <circle class="ring-track" cx="32" cy="32" r="26" stroke-width="4"/>
+                <circle class="ring-fill"  cx="32" cy="32" r="26" stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-dasharray="163.4"
+                  stroke-dashoffset="163.4"
+                  transform="rotate(-90 32 32)"/>
               </svg>
-              <span class="score-val">100</span>
+              <span class="score-val"></span>
             </div>
             <span class="score-label">SEO</span>
           </div>
+
         </div>
+
+        <!-- Script inline : initialise les cercles dès que le DOM est prêt -->
+        <script>
+          (function () {
+            const CIRC = 163.4; /* 2 × π × 26 */
+
+            function grade(score) {
+              if (score >= 90) return 'great';
+              if (score >= 50) return 'good';
+              return 'poor';
+            }
+
+            function initCards() {
+              document.querySelectorAll('.score-card[data-score]').forEach(card => {
+                const score  = parseInt(card.dataset.score, 10);
+                const g      = grade(score);
+                const offset = +(CIRC * (1 - score / 100)).toFixed(2);
+
+                /* Couleur sur la card et sur l'arc */
+                card.dataset.grade = g;
+                const fill = card.querySelector('.ring-fill');
+                if (fill) {
+                  fill.dataset.grade = g;
+                  /* Lancer l'animation après un court délai (laisse le CSS transition jouer) */
+                  requestAnimationFrame(() => requestAnimationFrame(() => {
+                    fill.style.strokeDashoffset = offset;
+                  }));
+                }
+
+                /* Afficher la valeur */
+                const val = card.querySelector('.score-val');
+                if (val) val.textContent = score;
+              });
+            }
+
+            /* Si le DOM est déjà prêt, on lance immédiatement, sinon on attend */
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', initCards);
+            } else {
+              initCards();
+            }
+          })();
+        </script>
 
         <!-- ── CODE ── -->
         <div class="pb-header reveal" style="margin-top:5rem">
@@ -261,7 +357,6 @@
           <h2 class="pb-title">Le <em>code</em></h2>
         </div>
 
-        <!-- BUG 7 FIX : code-block avec overflow-x géré -->
         <div class="code-block reveal" style="--reveal-delay:.07s">
           <div class="code-header">
             <span class="dot d1" aria-hidden="true"></span>
@@ -296,7 +391,6 @@
 
   </main>
 
-  <!-- BUG 11 FIX : lien next-project vers psg-dream-league (cohérent avec index) -->
   <div class="next-project" aria-label="Projet suivant">
     <a href="psg-dream-league.html" class="np-link" aria-label="Projet suivant : PSG Dream League">
       <div>
@@ -313,9 +407,7 @@
     <div class="fi">
       <span class="fn">Maxime Bourgeot</span>
       <span class="fm">Développeur & Créateur · Meslay-le-Vidame</span>
-      <!-- BUG 10 FIX : back-top pointe vers une ancre valide sur cette page -->
       <a href="#" class="back-top" aria-label="Retour en haut">↑ Retour en haut</a>
-      <!-- BUG 12 FIX : footer-year mis à jour par app.js (id reconnu) -->
       <span class="fy">© <span id="footer-year">2025</span></span>
     </div>
   </footer>
