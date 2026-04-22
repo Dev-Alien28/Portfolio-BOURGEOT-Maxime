@@ -9,18 +9,17 @@
   <meta property="og:title" content="PSG Dream League — Maxime Bourgeot">
   <meta property="og:description" content="Bot Discord officiel PSG — Discord.js, Node.js, déployé en production.">
   <meta property="og:type" content="website">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/project.css">
+  <script src="../js/app.js" defer></script>
 </head>
 <body>
 
   <div id="progress" role="progressbar" aria-hidden="true"></div>
   <div class="cursor" id="cursor" aria-hidden="true"></div>
 
-  <!-- ── NAV ── -->
   <nav id="nav" aria-label="Navigation principale">
     <a href="../index.html" class="nav-logo" aria-label="Retour au portfolio">Maxime Bourgeot</a>
     <ul class="nav-links" id="nav-links" role="list">
@@ -28,9 +27,7 @@
       <li><a href="../index.html#projets">Projets</a></li>
       <li><a href="../index.html#skills">Skills</a></li>
       <li><a href="../index.html#contact">Contact</a></li>
-      <li>
-        <a href="../public/cv-maxime-bourgeot.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer" aria-label="Télécharger mon CV">CV ↗</a>
-      </li>
+      <li><a href="../public/cv-maxime-bourgeot.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer" aria-label="Télécharger mon CV">CV ↗</a></li>
     </ul>
     <button class="nav-burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
       <span></span><span></span>
@@ -49,7 +46,6 @@
 
   <main>
 
-    <!-- ── PROJECT HERO ── -->
     <section class="ph" aria-label="PSG Dream League">
       <div class="ph-inner">
 
@@ -64,6 +60,7 @@
           <span class="ph-num">01</span>
         </div>
 
+        <!-- h1 unique sur la page projet -->
         <h1 class="ph-title reveal-init" style="--d:.18s">
           PSG<br><em>Dream League</em>
         </h1>
@@ -103,15 +100,14 @@
       </div>
     </section>
 
-    <!-- ── PRÉSENTATION ── -->
-    <section class="pb" aria-label="Présentation du projet">
+    <!-- PRÉSENTATION -->
+    <section class="pb" aria-labelledby="psg-ctx">
       <div class="pw">
-
         <div class="pb-header reveal">
           <span class="pb-num">01</span>
-          <h2 class="pb-title">Le <em>contexte</em></h2>
+          <!-- h2 correct : suit le h1 du hero -->
+          <h2 class="pb-title" id="psg-ctx">Le <em>contexte</em></h2>
         </div>
-
         <div class="pb-text reveal" style="--reveal-delay:.07s">
           <p>PSG Dream League est le <strong>bot officiel du serveur Discord du Paris Saint-Germain</strong>. Il centralise une expérience de jeu complète autour des cartes collectors, d'une monnaie virtuelle (les PSG Coins) et d'un système de boosters pour obtenir de nouvelles cartes.</p>
           <p>Le projet est déployé en production et utilisé <strong>quotidiennement par des milliers de membres</strong>. L'enjeu principal : stabilité absolue, performances irréprochables, et une expérience utilisateur fluide sur Discord.</p>
@@ -119,19 +115,16 @@
             <p>« Un bot qui doit tenir à l'échelle d'une communauté officielle de club de football — pas de compromis sur la fiabilité. »</p>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- ── FONCTIONNALITÉS ── -->
-    <section class="pb" aria-label="Fonctionnalités">
+    <!-- FONCTIONNALITÉS -->
+    <section class="pb" aria-labelledby="psg-feat">
       <div class="pw">
-
         <div class="pb-header reveal">
           <span class="pb-num">02</span>
-          <h2 class="pb-title">Les <em>fonctionnalités</em></h2>
+          <h2 class="pb-title" id="psg-feat">Les <em>fonctionnalités</em></h2>
         </div>
-
         <ul class="feat-list" role="list">
           <li class="feat-item reveal">
             <span class="feat-icon">[ 01 ]</span>
@@ -164,73 +157,64 @@
             <p class="feat-desc">Base de données robuste pour sauvegarder collections, soldes et historique de chaque membre.</p>
           </li>
         </ul>
-
       </div>
     </section>
 
-    <!-- ── STACK TECHNIQUE ── -->
-    <section class="pb" aria-label="Stack technique">
+    <!-- STACK TECHNIQUE -->
+    <section class="pb" aria-labelledby="psg-stack">
       <div class="pw">
-
         <div class="pb-header reveal">
           <span class="pb-num">03</span>
-          <h2 class="pb-title">Stack <em>technique</em></h2>
+          <h2 class="pb-title" id="psg-stack">Stack <em>technique</em></h2>
         </div>
-
         <div class="pb-text reveal" style="--reveal-delay:.07s">
           <p><strong>Discord.js v14</strong> est la colonne vertébrale du bot — gestion des événements, des interactions et des embeds. Le backend tourne sous <strong>Node.js</strong> avec une architecture orientée commandes modulaires pour faciliter la maintenance et l'ajout de fonctionnalités.</p>
           <p>La persistance est gérée par une base de données légère et fiable, requêtée de façon asynchrone pour ne jamais bloquer la boucle d'événements. Le bot est déployé sur un serveur dédié avec redémarrage automatique en cas d'erreur.</p>
         </div>
-
       </div>
     </section>
 
-    <!-- ── MÉDIAS ── -->
-    <section class="pb" aria-label="Captures">
+    <!-- MÉDIAS -->
+    <section class="pb" aria-labelledby="psg-media">
       <div class="pw">
-
         <div class="pb-header reveal">
           <span class="pb-num">04</span>
-          <h2 class="pb-title">Aperçu <em>visuel</em></h2>
+          <h2 class="pb-title" id="psg-media">Aperçu <em>visuel</em></h2>
         </div>
-
-        <!-- Remplace les src par tes vraies captures Discord -->
         <div class="media-grid cols-2 reveal" style="--reveal-delay:.07s">
           <div class="mg-item tall">
             <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
               <span>Screenshot — Embed Booster</span>
             </div>
           </div>
           <div class="mg-item tall">
             <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
               <span>Screenshot — Carte Légendaire</span>
             </div>
           </div>
           <div class="mg-item">
             <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
               <span>Screenshot — Leaderboard PSG Coins</span>
             </div>
           </div>
           <div class="mg-item">
             <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
               <span>Screenshot — Slash Commands</span>
             </div>
           </div>
         </div>
         <p class="mg-caption reveal" style="--reveal-delay:.14s">Remplace les placeholders par tes captures Discord réelles</p>
-
       </div>
     </section>
 
   </main>
 
-  <!-- ── NEXT PROJECT ── -->
   <div class="next-project" aria-label="Projet suivant">
-    <a href="football.html" class="np-link" aria-label="Projet suivant : Football">
+    <a href="football.html" class="np-link" aria-label="Voir le projet suivant : Football">
       <div>
         <p class="np-l">Projet suivant</p>
         <p class="np-t">Football</p>
@@ -243,11 +227,10 @@
     <div class="fi">
       <span class="fn">Maxime Bourgeot</span>
       <span class="fm">Développeur & Créateur · Meslay-le-Vidame</span>
-      <a href="#" class="back-top" aria-label="Retour en haut">↑ Retour en haut</a>
-      <span class="fy">© <span id="footer-year">2025</span></span>
+      <a href="#" class="back-top" aria-label="Retour en haut de la page">↑ Retour en haut</a>
+      <span class="fy">© <span id="footer-year">2026</span></span>
     </div>
   </footer>
 
-  <script src="../js/project.js"></script>
 </body>
 </html>
