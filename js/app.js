@@ -1,14 +1,3 @@
-/* ============================================================
-   PORTFOLIO — app.js  |  Maxime Bourgeot
-   Script unifié (remplace main.js ET project.js)
-   CORRECTIONS :
-   - Null checks sur chaque élément DOM avant usage
-   - Curseur désactivé sur pointer:coarse (tactile)
-   - .vis utilisé pour reveal (cohérent avec style.css)
-   - Smooth scroll compatible pages projet (liens ../index.html#section)
-   - Fermeture menu burger robuste (Escape + clic overlay)
-   - defer sur la balise <script> → pas besoin de DOMContentLoaded
-============================================================ */
 (function () {
   'use strict';
 
@@ -40,28 +29,35 @@
   }
 
   /* ── Curseur personnalisé
-       BUG 8 FIX : désactivé sur pointer:coarse (tactile) ── */
+     FIX : le CSS met désormais display:block + opacity:0 par défaut.
+     On révèle le curseur (opacity:1) uniquement au premier mousemove
+     pour éviter le flash en position (0,0) au chargement.
+     Sur tactile (pointer:coarse) le CSS masque déjà avec display:none !important.
+  ── */
   const cursor = document.getElementById('cursor');
   const isFinePointer = window.matchMedia('(pointer: fine) and (hover: hover)').matches;
 
   if (cursor && isFinePointer) {
-    cursor.style.display = 'block';
+    let revealed = false;
 
     document.addEventListener('mousemove', e => {
+      /* Positionner avant de révéler → zéro flash */
       cursor.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      if (!revealed) {
+        cursor.style.opacity = '1';
+        revealed = true;
+      }
     }, { passive: true });
 
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
-    document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+    document.addEventListener('mouseenter', () => { if (revealed) cursor.style.opacity = '1'; });
 
     document.querySelectorAll('a, button, .fb, .pc, .feat-item, .score-card, .cr').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('big'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
     });
-  } else if (cursor) {
-    /* Sécurité : masquer explicitement sur tactile */
-    cursor.style.display = 'none';
   }
+  /* Pas besoin de else : le CSS gère déjà display:none sur tactile */
 
   /* ── Nav scroll ── */
   const nav = document.getElementById('nav');
@@ -110,22 +106,18 @@
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
-    /* Fermer au clic sur un lien dans l'overlay */
     overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobile));
 
-    /* Fermer sur Escape */
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMobile();
     });
 
-    /* Fermer au clic en dehors de l'overlay (sur le fond) */
     overlay.addEventListener('click', e => {
       if (e.target === overlay) closeMobile();
     });
   }
 
-  /* ── Scroll reveal
-       BUG 9 FIX : .vis (cohérent avec style.css, non .visible) ── */
+  /* ── Scroll reveal ── */
   const revealEls = document.querySelectorAll('.reveal');
   if (revealEls.length) {
     const revealObs = new IntersectionObserver(entries => {
@@ -178,10 +170,7 @@
     });
   }
 
-  /* ── Smooth anchor scroll
-       Fonctionne sur index.html ET sur les pages projet
-       (les liens ../index.html#section sont des navigations normales,
-       seuls les href="#xxx" sur la même page sont concernés) ── */
+  /* ── Smooth anchor scroll ── */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     const hash = a.getAttribute('href');
     if (!hash || hash === '#') return;
@@ -217,7 +206,6 @@
           .then(() => showToast('Email copié ✓'))
           .catch(() => { window.location.href = copyEl.href; });
       } else {
-        /* Fallback pour navigateurs anciens */
         window.location.href = copyEl.href;
       }
     });
