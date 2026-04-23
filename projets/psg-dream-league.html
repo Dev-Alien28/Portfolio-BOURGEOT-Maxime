@@ -9,10 +9,153 @@
   <meta property="og:title" content="PSG Dream League — Maxime Bourgeot">
   <meta property="og:description" content="Bot Discord officiel PSG — Discord.js, Node.js, déployé en production.">
   <meta property="og:type" content="website">
-    <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/project.css">
+
+  <!-- ═══════════════════════════════════════════
+       STYLES SECTION MÉDIA — remplace / complète
+       project.css pour la grille médias mixtes
+  ═══════════════════════════════════════════ -->
+  <style>
+    /* ── Grille médias mixtes (images + vidéos) ── */
+    .media-mixed {
+      display: grid;
+      /*
+        2 colonnes sur desktop.
+        Chaque colonne fait au moins 280px — sur mobile elles
+        s'empilent automatiquement en 1 colonne.
+      */
+      grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* ── Item générique ── */
+    .mm-item {
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      /* Hauteur minimale pour que les items ne soient pas écrasés */
+      min-height: 220px;
+    }
+
+    /*
+      Les images : on laisse leur taille naturelle guider la hauteur.
+      object-fit:contain → aucune information rognée, proportions respectées.
+      On ajoute un fond sombre pour les éventuelles zones vides.
+    */
+    .mm-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: transform .5s var(--ease, cubic-bezier(.22,1,.36,1));
+    }
+    .mm-item:hover img {
+      transform: scale(1.03);
+    }
+
+    /*
+      Les vidéos : conteneur avec aspect-ratio 16/9 par défaut,
+      overridable via classe utilitaire.
+      object-fit:contain → pas de crop, toutes proportions acceptées.
+    */
+    .mm-video-wrap {
+      width: 100%;
+      position: relative;
+      background: #000;
+    }
+    .mm-video-wrap.ratio-16-9  { aspect-ratio: 16 / 9; }
+    .mm-video-wrap.ratio-4-3   { aspect-ratio: 4 / 3; }
+    .mm-video-wrap.ratio-9-16  { aspect-ratio: 9 / 16; }
+    /* fallback : si aucune classe ratio → la vidéo définit sa propre hauteur */
+
+    .mm-video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    /* Quand pas de ratio forcé → position static, hauteur auto */
+    .mm-video-wrap:not([class*="ratio-"]) {
+      position: static;
+    }
+    .mm-video-wrap:not([class*="ratio-"]) video {
+      position: static;
+      height: auto;
+      max-height: 480px;
+    }
+
+    /* Label flottant en bas à gauche */
+    .mm-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: .55rem 1rem;
+      background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 100%);
+      font-family: var(--f-mono, monospace);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      pointer-events: none;
+    }
+
+    /* Badge "photo" / "vidéo" */
+    .mm-badge {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      background: rgba(10,10,10,.85);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 3px;
+      padding: .2rem .55rem;
+      font-family: var(--f-mono, monospace);
+      font-size: .55rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent, #c8f0a0);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    /* ── Responsive desktop : forcer 2 colonnes au-delà de 600px ── */
+    @media (min-width: 600px) {
+      .media-mixed {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ── Mobile : 1 colonne ── */
+    @media (max-width: 599px) {
+      .media-mixed {
+        grid-template-columns: 1fr;
+      }
+      .mm-item {
+        min-height: 180px;
+      }
+      .mm-video-wrap:not([class*="ratio-"]) video {
+        max-height: 280px;
+      }
+    }
+
+    /* ── Contrôles vidéo styling léger (Chrome/Safari) ── */
+    video::-webkit-media-controls-panel {
+      background-image: linear-gradient(to top, rgba(0,0,0,.6), transparent);
+    }
+  </style>
+
   <script src="../js/app.js" defer></script>
 </head>
 <body>
@@ -60,7 +203,6 @@
           <span class="ph-num">01</span>
         </div>
 
-        <!-- h1 unique sur la page projet -->
         <h1 class="ph-title reveal-init" style="--d:.18s">
           PSG<br><em>Dream League</em>
         </h1>
@@ -105,20 +247,19 @@
       <div class="pw">
         <div class="pb-header reveal">
           <span class="pb-num">01</span>
-          <!-- h2 correct : suit le h1 du hero -->
           <h2 class="pb-title" id="psg-ctx">Le <em>contexte</em></h2>
         </div>
         <div class="pb-text reveal" style="--reveal-delay:.07s">
           <p>
             PSG Dream League est un <strong>bot communautaire intégré au serveur Discord officiel du Paris Saint-Germain</strong>.
-            Il propose une expérience interactive complète autour des cartes collectors, d’une monnaie virtuelle (PSG Coins) et d’un système de boosters permettant d’obtenir de nouvelles cartes.
-            </p>
-            <p>
-              Déployé en production, le bot est utilisé <strong>quotidiennement par plusieurs milliers de membres</strong>.
-              Il est conçu pour garantir une stabilité constante, des performances élevées et une expérience fluide sur Discord.
+            Il propose une expérience interactive complète autour des cartes collectors, d'une monnaie virtuelle (PSG Coins) et d'un système de boosters permettant d'obtenir de nouvelles cartes.
           </p>
-            <div class="callout">
-            <p>« Un bot conçu pour tenir à l’échelle d’une communauté active — sans compromis sur la fiabilité. »</p>
+          <p>
+            Déployé en production, le bot est utilisé <strong>quotidiennement par plusieurs milliers de membres</strong>.
+            Il est conçu pour garantir une stabilité constante, des performances élevées et une expérience fluide sur Discord.
+          </p>
+          <div class="callout">
+            <p>« Un bot conçu pour tenir à l'échelle d'une communauté active — sans compromis sur la fiabilité. »</p>
           </div>
         </div>
       </div>
@@ -126,102 +267,87 @@
 
     <!-- FONCTIONNALITÉS -->
     <section class="pb" aria-labelledby="psg-feat">
-  <div class="pw">
+      <div class="pw">
+        <div class="pb-header reveal">
+          <span class="pb-num">02</span>
+          <h2 class="pb-title" id="psg-feat">Les <em>fonctionnalités</em></h2>
+        </div>
 
-    <div class="pb-header reveal">
-      <span class="pb-num">02</span>
-      <h2 class="pb-title" id="psg-feat">Les <em>fonctionnalités</em></h2>
-    </div>
-
-    <p class="pb-intro reveal" style="--reveal-delay:.04s">
-      Le bot a été conçu pour transformer un serveur Discord en une expérience interactive complète autour de la collection et de la progression.
-    </p>
-
-    <ul class="feat-list" role="list">
-
-      <li class="feat-item reveal">
-        <span class="feat-icon">[ 01 ]</span>
-        <p class="feat-name">Système de boosters</p>
-        <p class="feat-desc">
-          Ouverture de boosters avec animations via embeds Discord, gestion des raretés
-          et probabilités équilibrées pour chaque carte obtenue.
+        <p class="pb-intro reveal" style="--reveal-delay:.04s">
+          Le bot a été conçu pour transformer un serveur Discord en une expérience interactive complète autour de la collection et de la progression.
         </p>
-      </li>
 
-      <li class="feat-item reveal" style="--reveal-delay:.06s">
-        <span class="feat-icon">[ 02 ]</span>
-        <p class="feat-name">Cartes collectors</p>
-        <p class="feat-desc">
-          Système de collection avec plusieurs niveaux de rareté
-          (Commun, Rare, Épique, Légendaire) et affichage enrichi directement dans Discord.
-        </p>
-      </li>
-
-      <li class="feat-item reveal" style="--reveal-delay:.12s">
-        <span class="feat-icon">[ 03 ]</span>
-        <p class="feat-name">PSG Coins</p>
-        <p class="feat-desc">
-          Monnaie virtuelle du serveur permettant de gagner, échanger
-          et utiliser ses crédits pour acheter de nouveaux boosters.
-        </p>
-      </li>
-
-      <li class="feat-item reveal" style="--reveal-delay:.18s">
-        <span class="feat-icon">[ 04 ]</span>
-        <p class="feat-name">Slash commands</p>
-        <p class="feat-desc">
-          Interface entièrement basée sur les commandes natives de Discord
-          pour une navigation claire et rapide.
-        </p>
-      </li>
-
-      <li class="feat-item reveal" style="--reveal-delay:.24s">
-        <span class="feat-icon">[ 05 ]</span>
-        <p class="feat-name">Composants interactifs</p>
-        <p class="feat-desc">
-          Boutons, menus déroulants et modaux intégrés
-          pour rendre l’expérience plus intuitive et interactive.
-        </p>
-      </li>
-
-      <li class="feat-item reveal" style="--reveal-delay:.30s">
-        <span class="feat-icon">[ 06 ]</span>
-        <p class="feat-name">Persistance des données</p>
-        <p class="feat-desc">
-          Sauvegarde des collections, soldes et historiques
-          pour garantir la continuité de l’expérience de chaque membre.
-        </p>
-      </li>
-
-    </ul>
-
-  </div>
-</section>
+        <ul class="feat-list" role="list">
+          <li class="feat-item reveal">
+            <span class="feat-icon">[ 01 ]</span>
+            <p class="feat-name">Système de boosters</p>
+            <p class="feat-desc">
+              Ouverture de boosters avec animations via embeds Discord, gestion des raretés
+              et probabilités équilibrées pour chaque carte obtenue.
+            </p>
+          </li>
+          <li class="feat-item reveal" style="--reveal-delay:.06s">
+            <span class="feat-icon">[ 02 ]</span>
+            <p class="feat-name">Cartes collectors</p>
+            <p class="feat-desc">
+              Système de collection avec plusieurs niveaux de rareté
+              (Commun, Rare, Épique, Légendaire) et affichage enrichi directement dans Discord.
+            </p>
+          </li>
+          <li class="feat-item reveal" style="--reveal-delay:.12s">
+            <span class="feat-icon">[ 03 ]</span>
+            <p class="feat-name">PSG Coins</p>
+            <p class="feat-desc">
+              Monnaie virtuelle du serveur permettant de gagner, échanger
+              et utiliser ses crédits pour acheter de nouveaux boosters.
+            </p>
+          </li>
+          <li class="feat-item reveal" style="--reveal-delay:.18s">
+            <span class="feat-icon">[ 04 ]</span>
+            <p class="feat-name">Slash commands</p>
+            <p class="feat-desc">
+              Interface entièrement basée sur les commandes natives de Discord
+              pour une navigation claire et rapide.
+            </p>
+          </li>
+          <li class="feat-item reveal" style="--reveal-delay:.24s">
+            <span class="feat-icon">[ 05 ]</span>
+            <p class="feat-name">Composants interactifs</p>
+            <p class="feat-desc">
+              Boutons, menus déroulants et modaux intégrés
+              pour rendre l'expérience plus intuitive et interactive.
+            </p>
+          </li>
+          <li class="feat-item reveal" style="--reveal-delay:.30s">
+            <span class="feat-icon">[ 06 ]</span>
+            <p class="feat-name">Persistance des données</p>
+            <p class="feat-desc">
+              Sauvegarde des collections, soldes et historiques
+              pour garantir la continuité de l'expérience de chaque membre.
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- STACK TECHNIQUE -->
     <section class="pb" aria-labelledby="psg-stack">
       <div class="pw">
-
         <div class="pb-header reveal">
           <span class="pb-num">03</span>
           <h2 class="pb-title" id="psg-stack">Stack <em>technique</em></h2>
         </div>
-
         <div class="pb-text reveal" style="--reveal-delay:.07s">
-
           <p>
-            Le bot repose sur <strong>Discord.js v14</strong>, qui gère l’ensemble des interactions, événements et systèmes d’embed.
-            L’architecture est construite autour de modules indépendants afin de faciliter l’évolution et la maintenance du projet.
+            Le bot repose sur <strong>Discord.js v14</strong>, qui gère l'ensemble des interactions, événements et systèmes d'embed.
+            L'architecture est construite autour de modules indépendants afin de faciliter l'évolution et la maintenance du projet.
           </p>
-
           <p>
-            Le backend est développé sous <strong>Node.js</strong> avec une structure orientée commandes, pensée pour rester scalable et lisible même à mesure que les fonctionnalités s’ajoutent.
+            Le backend est développé sous <strong>Node.js</strong> avec une structure orientée commandes, pensée pour rester scalable et lisible même à mesure que les fonctionnalités s'ajoutent.
           </p>
-
           <p>
             La persistance des données est assurée par une base légère et performante, utilisée en asynchrone afin de garantir des performances stables sans bloquer les traitements du bot.
           </p>
-
           <p>
             Le tout est déployé sur un serveur dédié avec redémarrage automatique et monitoring de stabilité pour assurer un fonctionnement continu en production.
           </p>
@@ -229,40 +355,95 @@
       </div>
     </section>
 
-    <!-- MÉDIAS -->
+    <!-- MÉDIAS ══════════════════════════════════════════════════════════
+         Grille mixte : 2 images (proportions libres) + 2 vidéos (mp4)
+         Layout desktop : 2 colonnes — mobile : 1 colonne empilée
+    ═══════════════════════════════════════════════════════════════════ -->
     <section class="pb" aria-labelledby="psg-media">
       <div class="pw">
         <div class="pb-header reveal">
           <span class="pb-num">04</span>
           <h2 class="pb-title" id="psg-media">Aperçu <em>visuel</em></h2>
         </div>
-        <div class="media-grid cols-2 reveal" style="--reveal-delay:.07s">
-          <div class="mg-item tall">
-            <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
-              <span>Screenshot — Embed Booster</span>
-            </div>
+
+        <div class="media-mixed reveal" style="--reveal-delay:.07s">
+
+          <!-- ① Image : encounter.png
+               Proportions inconnues → object-fit:contain, hauteur auto.
+               On force un min-height pour éviter un rendu écrasé si l'image
+               est très large et peu haute. -->
+          <div class="mm-item" style="min-height: 260px;">
+            <img
+              src="../public/images/encounter.png"
+              alt="Rencontre — PSG Dream League"
+              data-lightbox
+              data-caption="Encounter"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="mm-badge">Photo</span>
+            <span class="mm-label">Encounter</span>
           </div>
-          <div class="mg-item tall">
-            <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
-              <span>Screenshot — Carte Légendaire</span>
-            </div>
+
+          <!-- ② Image : psg-officiel.png -->
+          <div class="mm-item" style="min-height: 260px;">
+            <img
+              src="../public/images/psg-officiel.png"
+              alt="PSG Officiel — aperçu du bot"
+              data-lightbox
+              data-caption="PSG Officiel"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="mm-badge">Photo</span>
+            <span class="mm-label">PSG Officiel</span>
           </div>
-          <div class="mg-item">
-            <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
-              <span>Screenshot — Leaderboard PSG Coins</span>
+
+          <!-- ③ Vidéo : booster.mp4
+               On utilise ratio-16-9 comme ratio par défaut.
+               Si ta vidéo est dans un autre ratio (9:16 vertical,
+               4:3, etc.) remplace la classe par ratio-9-16 ou ratio-4-3,
+               ou supprime toute classe ratio-* pour que la vidéo
+               impose elle-même sa hauteur. -->
+          <div class="mm-item" style="background:#000; display:block;">
+            <div class="mm-video-wrap ratio-16-9">
+              <video
+                src="../public/vidéos/booster.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Démonstration — ouverture de booster"
+              ></video>
             </div>
+            <span class="mm-badge">Vidéo</span>
+            <span class="mm-label">Ouverture de booster</span>
           </div>
-          <div class="mg-item">
-            <div class="mg-placeholder">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 12h28" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/></svg>
-              <span>Screenshot — Slash Commands</span>
+
+          <!-- ④ Vidéo : collection.mp4
+               Même logique que ci-dessus. -->
+          <div class="mm-item" style="background:#000; display:block;">
+            <div class="mm-video-wrap ratio-16-9">
+              <video
+                src="../public/vidéos/collection.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Démonstration — collection de cartes"
+              ></video>
             </div>
+            <span class="mm-badge">Vidéo</span>
+            <span class="mm-label">Collection de cartes</span>
           </div>
-        </div>
-        <p class="mg-caption reveal" style="--reveal-delay:.14s">Remplace les placeholders par tes captures Discord réelles</p>
+
+        </div><!-- /.media-mixed -->
+
+        <p class="mg-caption reveal" style="--reveal-delay:.14s">
+          Aperçus du bot en production sur le serveur Discord officiel du PSG
+        </p>
       </div>
     </section>
 

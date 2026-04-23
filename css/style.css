@@ -117,11 +117,10 @@ img, video, iframe { max-width: 100%; height: auto; display: block; }
   background: var(--accent);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 2147483647;
   will-change: transform;
-  /* FIX : display: block au lieu de display: none */
   display: block;
-  opacity: 0; /* caché jusqu'au premier mousemove via JS */
+  opacity: 0;
   transition: width .2s var(--ease), height .2s var(--ease), background .2s, border .2s, opacity .15s;
 }
 .cursor.big {
@@ -135,6 +134,27 @@ img, video, iframe { max-width: 100%; height: auto; display: block; }
   .cursor { display: none !important; }
   body { cursor: auto !important; }
 }
+
+/* ── Masquer le texte alt des images de grille cassées ──
+   Ciblé uniquement sur les conteneurs visuels, pas toutes les imgs. */
+.mp-item img,
+.mg-item img,
+.mm-item img,
+.media-posts img,
+.media-grid img,
+.about-photo img {
+  font-size: 0;
+  color: transparent;
+}
+
+/* ── Curseur natif restauré en plein écran vidéo ──
+   Le navigateur force cursor:auto en fullscreen → on respecte ça
+   et on masque juste le curseur custom via le JS fullscreenchange. */
+:-webkit-full-screen { cursor: auto !important; }
+:-moz-full-screen    { cursor: auto !important; }
+:fullscreen          { cursor: auto !important; }
+/* Le backdrop (fond noir derrière la vidéo) aussi */
+::backdrop           { cursor: auto !important; }
 
 /* ============================================================
    NOISE OVERLAY

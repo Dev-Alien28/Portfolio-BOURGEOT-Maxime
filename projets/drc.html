@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Site DRC — Maxime Bourgeot</title>
+  <meta name="description" content="Site web complet développé pour le Dammarie Rugby Club — boutique, pronostics, espace admin, contact et localisation.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Site DRC — Maxime Bourgeot">
+  <meta property="og:description" content="Site web complet pour le Dammarie Rugby Club — candidature alternance Chef de projet Web & Stratégie Digitale.">
+  <meta property="og:type" content="website">
+  <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/project.css">
+
+  <style>
+    /* ── Grille vidéos ── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .vg-item {
+      background: var(--bg2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vg-video-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .vg-video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .vg-info {
+      padding: 1.2rem 1.4rem 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .vg-label {
+      font-family: var(--f-mono);
+      font-size: .58rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .4rem;
+      display: block;
+    }
+
+    .vg-title {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: .35rem;
+    }
+
+    .vg-desc {
+      font-size: .78rem;
+      color: var(--mid);
+      line-height: 1.65;
+    }
+
+    .vg-badge {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      background: rgba(10,10,10,.85);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 3px;
+      padding: .2rem .55rem;
+      font-family: var(--f-mono);
+      font-size: .55rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    @media (min-width: 900px) {
+      .video-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 599px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Contrôles vidéo ── */
+    video::-webkit-media-controls-panel {
+      background-image: linear-gradient(to top, rgba(0,0,0,.6), transparent);
+    }
+  </style>
+
+  <script src="../js/app.js" defer></script>
+</head>
+<body>
+
+  <div id="progress" role="progressbar" aria-hidden="true"></div>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+  <nav id="nav" aria-label="Navigation principale">
+    <a href="../index.html" class="nav-logo" aria-label="Retour au portfolio">Maxime Bourgeot</a>
+    <ul class="nav-links" id="nav-links" role="list">
+      <li><a href="../index.html#apropos">À propos</a></li>
+      <li><a href="../index.html#projets">Projets</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a href="../public/cv-maxime-bourgeot.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">CV ↗</a></li>
+    </ul>
+    <button class="nav-burger" id="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobile-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Menu navigation">
+    <ul role="list">
+      <li><a href="../index.html#apropos">À propos</a></li>
+      <li><a href="../index.html#projets">Projets</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a href="../public/cv-maxime-bourgeot.pdf" target="_blank" rel="noopener noreferrer">Télécharger CV</a></li>
+    </ul>
+  </div>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="ph" aria-label="Site DRC">
+      <div class="ph-inner">
+
+        <a href="../index.html#projets" class="back-link reveal-init" style="--d:.05s">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M13 7H1M1 7l5-5M1 7l5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Retour aux projets
+        </a>
+
+        <div class="ph-meta reveal-init" style="--d:.1s">
+          <span class="ph-cat">Développement Web</span>
+          <span class="ph-sep">·</span>
+          <span class="ph-num">06</span>
+        </div>
+
+        <h1 class="ph-title reveal-init" style="--d:.18s">
+          Site <em>DRC</em>
+        </h1>
+
+        <p class="ph-desc reveal-init" style="--d:.28s">
+          Site web complet conçu et développé pour le <strong>Dammarie Rugby Club</strong> dans le cadre d'une candidature
+          en alternance — Chef de projet Web & Stratégie Digitale. Un projet from scratch pour démontrer mes compétences
+          en conditions réelles, avec de vraies fonctionnalités pensées pour le club.
+        </p>
+
+        <div class="ph-chips reveal-init" style="--d:.36s">
+          <span class="chip">HTML / CSS</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">Supabase</span>
+          <span class="chip">Authentification</span>
+          <span class="chip">Espace admin</span>
+          <span class="chip">Mini-jeu pronostics</span>
+          <span class="chip">E-mail via site</span>
+        </div>
+
+        <div class="ph-stats reveal-init" style="--d:.44s">
+          <div class="ph-stat">
+            <span class="ph-stat-l">Statut</span>
+            <span class="ph-stat-v">Projet personnel</span>
+          </div>
+          <div class="ph-stat">
+            <span class="ph-stat-l">Type</span>
+            <span class="ph-stat-v">Site web complet</span>
+          </div>
+          <div class="ph-stat">
+            <span class="ph-stat-l">Client cible</span>
+            <span class="ph-stat-v">Dammarie Rugby Club</span>
+          </div>
+          <div class="ph-stat">
+            <span class="ph-stat-l">Année</span>
+            <span class="ph-stat-v">2026</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTEXTE -->
+    <section class="pb" aria-labelledby="drc-ctx">
+      <div class="pw">
+        <div class="pb-header reveal">
+          <span class="pb-num">01</span>
+          <h2 class="pb-title" id="drc-ctx">Le <em>contexte</em></h2>
+        </div>
+        <div class="pb-text reveal" style="--reveal-delay:.07s">
+          <p>
+            Plutôt que d'envoyer un CV classique, j'ai choisi de <strong>développer un site web complet</strong> pour le Dammarie Rugby Club
+            afin de candidater à une alternance en tant que Chef de projet Web & Stratégie Digitale.
+            L'idée : prouver concrètement ce que je suis capable de faire, pas juste l'écrire sur du papier.
+          </p>
+          <p>
+            Le site a été pensé comme un vrai outil pour le club — pas une démo vide. Chaque fonctionnalité répond à un besoin réel :
+            vendre des produits, engager les supporters, faciliter le contact, afficher les résultats.
+          </p>
+          <div class="callout">
+            <p>« Un CV, ça s'oublie. Un site fonctionnel qu'on a codé pour vous, beaucoup moins. »</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FONCTIONNALITÉS -->
+    <section class="pb" aria-labelledby="drc-feat">
+      <div class="pw">
+        <div class="pb-header reveal">
+          <span class="pb-num">02</span>
+          <h2 class="pb-title" id="drc-feat">Les <em>fonctionnalités</em></h2>
+        </div>
+
+        <ul class="feat-list" role="list">
+
+          <li class="feat-item reveal">
+            <span class="feat-icon">[ 01 ]</span>
+            <p class="feat-name">Système de matchs & pronostics</p>
+            <p class="feat-desc">
+              L'administrateur paramètre les matchs, les compositions et les scores via un espace dédié.
+              Les supporters connectés peuvent pronostiquer les scores et s'affrontent dans un classement général.
+              Backend géré via <strong>Supabase</strong> (base de données + authentification).
+            </p>
+          </li>
+
+          <li class="feat-item reveal" style="--reveal-delay:.06s">
+            <span class="feat-icon">[ 02 ]</span>
+            <p class="feat-name">Boutique officielle</p>
+            <p class="feat-desc">
+              Redirection directe vers la boutique officielle du club, en partenariat avec <strong>Macron</strong>
+              (équipementier officiel). Un bouton simple, bien intégré, pour ne jamais perdre un acheteur potentiel.
+            </p>
+          </li>
+
+          <li class="feat-item reveal" style="--reveal-delay:.12s">
+            <span class="feat-icon">[ 03 ]</span>
+            <p class="feat-name">Formulaire de contact</p>
+            <p class="feat-desc">
+              Envoi de mail directement depuis le site, sans passer par un client mail externe.
+              Le visiteur remplit un formulaire, le club reçoit le message. Simple et efficace.
+            </p>
+          </li>
+
+          <li class="feat-item reveal" style="--reveal-delay:.18s">
+            <span class="feat-icon">[ 04 ]</span>
+            <p class="feat-name">Localisation intégrée</p>
+            <p class="feat-desc">
+              Carte interactive pour trouver le stade facilement — utile pour les nouveaux supporters,
+              les adversaires et les partenaires du club.
+            </p>
+          </li>
+
+          <li class="feat-item reveal" style="--reveal-delay:.24s">
+            <span class="feat-icon">[ 05 ]</span>
+            <p class="feat-name">Authentification & espace admin</p>
+            <p class="feat-desc">
+              Système de connexion complet via Supabase. L'administrateur accède à un back-office
+              pour gérer les matchs, les scores et les compositions en temps réel.
+            </p>
+          </li>
+
+          <li class="feat-item reveal" style="--reveal-delay:.30s">
+            <span class="feat-icon">[ 06 ]</span>
+            <p class="feat-name">Pages éditoriales</p>
+            <p class="feat-desc">
+              Histoire du club, actualités, présentation des équipes — un socle éditorial complet
+              pour donner de la profondeur au site et fidéliser les visiteurs.
+            </p>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="pb" aria-labelledby="drc-stack">
+      <div class="pw">
+        <div class="pb-header reveal">
+          <span class="pb-num">03</span>
+          <h2 class="pb-title" id="drc-stack">Stack <em>technique</em></h2>
+        </div>
+        <div class="pb-text reveal" style="--reveal-delay:.07s">
+          <p>
+            Le site est développé en <strong>HTML / CSS / JavaScript vanilla</strong> — pas de framework, tout from scratch,
+            pour garder un contrôle total sur les performances et l'architecture.
+          </p>
+          <p>
+            La partie base de données et authentification repose sur <strong>Supabase</strong> : gestion des comptes utilisateurs,
+            stockage des pronostics, des scores et des compositions de matchs en temps réel.
+            Le formulaire de contact utilise un service d'envoi d'email côté serveur pour ne pas exposer les identifiants.
+          </p>
+          <p>
+            La carte de localisation est intégrée via une <strong>iframe Google Maps</strong> directement dans la page contact,
+            sans dépendance supplémentaire.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDÉOS -->
+    <section class="pb" aria-labelledby="drc-media">
+      <div class="pw">
+        <div class="pb-header reveal">
+          <span class="pb-num">04</span>
+          <h2 class="pb-title" id="drc-media">Aperçu <em>vidéo</em></h2>
+        </div>
+
+        <div class="video-grid reveal" style="--reveal-delay:.07s">
+
+          <!-- Boutique -->
+          <div class="vg-item">
+            <div class="vg-video-wrap">
+              <video
+                src="../public/vidéos/boutique.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Démonstration — boutique Macron"
+              ></video>
+              <span class="vg-badge">Vidéo</span>
+            </div>
+            <div class="vg-info">
+              <span class="vg-label">Fonctionnalité 01</span>
+              <p class="vg-title">Boutique Macron</p>
+              <p class="vg-desc">Redirection vers la boutique officielle du club, partenaire équipementier Macron.</p>
+            </div>
+          </div>
+
+          <!-- Match & pronostics -->
+          <div class="vg-item">
+            <div class="vg-video-wrap">
+              <video
+                src="../public/vidéos/match.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Démonstration — matchs et pronostics"
+              ></video>
+              <span class="vg-badge">Vidéo</span>
+            </div>
+            <div class="vg-info">
+              <span class="vg-label">Fonctionnalité 02</span>
+              <p class="vg-title">Matchs & Pronostics</p>
+              <p class="vg-desc">Gestion des scores et compositions via l'espace admin. Classement des pronostics des supporters en temps réel via Supabase.</p>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="vg-item">
+            <div class="vg-video-wrap">
+              <video
+                src="../public/vidéos/contact.mp4"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Démonstration — contact et localisation"
+              ></video>
+              <span class="vg-badge">Vidéo</span>
+            </div>
+            <div class="vg-info">
+              <span class="vg-label">Fonctionnalité 03</span>
+              <p class="vg-title">Contact & Localisation</p>
+              <p class="vg-desc">Formulaire d'envoi de mail directement depuis le site et carte interactive pour localiser le stade.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="next-project" aria-label="Retour au portfolio">
+    <a href="../index.html#projets" class="np-link" aria-label="Retour au portfolio">
+      <div>
+        <p class="np-l">Tous les projets</p>
+        <p class="np-t">Retour au portfolio</p>
+      </div>
+      <svg class="np-arr" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 16h24M20 9l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <footer>
+    <div class="fi">
+      <span class="fn">Maxime Bourgeot</span>
+      <span class="fm">Développeur & Créateur · Meslay-le-Vidame</span>
+      <a href="#" class="back-top" aria-label="Retour en haut">↑ Retour en haut</a>
+      <span class="fy">© <span id="footer-year">2026</span></span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -9,10 +9,105 @@
   <meta property="og:title" content="Football — Maxime Bourgeot">
   <meta property="og:description" content="Analyses tactiques, visuels soignés et actualités football.">
   <meta property="og:type" content="website">
-    <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/project.css">
+
+  <style>
+    /* ── Grille médias adaptée aux images de format carré (posts réseaux) ── */
+    .media-posts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .mp-item {
+      background: var(--bg2);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mp-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s var(--ease, cubic-bezier(.22,1,.36,1));
+    }
+    .mp-item:hover img {
+      transform: scale(1.04);
+    }
+
+    /* Overlay au hover */
+    .mp-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,10,.35);
+      opacity: 0;
+      transition: opacity .3s;
+      /* Ne pas intercepter les clics — l'image en dessous doit rester cliquable */
+      pointer-events: none;
+    }
+    .mp-item:hover::after {
+      opacity: 1;
+    }
+
+    /* Curseur zoom sur les items cliquables */
+    .mp-item { cursor: zoom-in; }
+
+    /* Label bas de l'image */
+    .mp-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: .9rem 1rem .7rem;
+      background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 100%);
+      font-family: var(--f-mono, monospace);
+      font-size: .6rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+      z-index: 1;
+      transition: color .2s;
+    }
+    .mp-item:hover .mp-label {
+      color: var(--accent, #c8f0a0);
+    }
+
+    /* Placeholder pour les slots vides — à supprimer quand tu auras les images */
+    .mp-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      color: var(--muted, #555);
+    }
+    .mp-placeholder svg { opacity: .25; }
+    .mp-placeholder span {
+      font-family: var(--f-mono, monospace);
+      font-size: .58rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* Mobile : 1 colonne sous 480px */
+    @media (max-width: 480px) {
+      .media-posts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script src="../js/app.js" defer></script>
 </head>
 <body>
 
@@ -56,7 +151,7 @@
         <div class="ph-meta reveal-init" style="--d:.1s">
           <span class="ph-cat">Contenu</span>
           <span class="ph-sep">·</span>
-          <span class="ph-num">03</span>
+          <span class="ph-num">02</span>
         </div>
 
         <h1 class="ph-title reveal-init" style="--d:.18s">
@@ -64,15 +159,15 @@
         </h1>
 
         <p class="ph-desc reveal-init" style="--d:.28s">
-          Analyses tactiques, visuels soignés et actualités. Une communauté engagée construite autour d'un contenu régulier, qualitatif et distinctif sur le football.
+          Création de visuels sportifs impactants et adaptés aux réseaux sociaux.
+          Un contenu centré sur le design et l’engagement, publié régulièrement autour de l’univers du football.
         </p>
 
         <div class="ph-chips reveal-init" style="--d:.36s">
-          <span class="chip">Football</span>
-          <span class="chip">Réseaux sociaux</span>
           <span class="chip">Design graphique</span>
-          <span class="chip">Analyse tactique</span>
-          <span class="chip">Community building</span>
+          <span class="chip">Visuels sportifs</span>
+          <span class="chip">Réseaux sociaux</span>
+          <span class="chip">Contenu football</span>
         </div>
 
         <div class="ph-stats reveal-init" style="--d:.44s">
@@ -82,113 +177,127 @@
           </div>
           <div class="ph-stat">
             <span class="ph-stat-l">Type</span>
-            <span class="ph-stat-v">Contenu & Communauté</span>
+            <span class="ph-stat-v">Création de contenu visuel</span>
           </div>
           <div class="ph-stat">
-            <span class="ph-stat-l">Sport</span>
+            <span class="ph-stat-l">Année</span>
+            <span class="ph-stat-v">2026</span>
+          </div>
+          <div class="ph-stat">
+            <span class="ph-stat-l">Domaine</span>
             <span class="ph-stat-v">Football</span>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- ── CONCEPT ── -->
-    <section class="pb" aria-label="Concept">
+    <!-- CONCEPT -->
+    <section class="pb" aria-labelledby="foot-ctx">
       <div class="pw">
+
         <div class="pb-header reveal">
           <span class="pb-num">01</span>
-          <h2 class="pb-title">Le <em>concept</em></h2>
+          <h2 class="pb-title" id="foot-ctx">Le <em>concept</em></h2>
         </div>
+
         <div class="pb-text reveal" style="--reveal-delay:.07s">
-          <p>Le football est le sport le plus suivi au monde — mais le contenu qualitatif, bien designé et vraiment analytique, ça reste rare. L'objectif de ce projet est de combler ce manque en proposant des analyses tactiques rigoureuses associées à des <strong>visuels travaillés</strong>.</p>
-          <p>Pas du contenu pour faire du volume. Du contenu pour apporter de la valeur : décryptages de schémas tactiques, statistiques contextualisées, storytelling autour des grandes équipes et joueurs.</p>
+          <p>
+            Le football génère énormément de contenu sur les réseaux, mais peu se distingue visuellement.
+            L’objectif ici est simple : créer des visuels modernes, lisibles et impactants, pensés pour capter l’attention dès les premières secondes.
+          </p>
+
+          <p>
+            Chaque publication est construite avec une attention particulière portée au design :
+            hiérarchie de l’information, cohérence graphique et adaptation aux formats des réseaux sociaux.
+            Le but n’est pas de publier en masse, mais de proposer un contenu régulier et soigné.
+          </p>
+
           <div class="callout">
-            <p>« Le football mérite mieux que des screenshots mal rognés et des avis à l'emporte-pièce. »</p>
+            <p>« Un bon visuel attire l’attention, un visuel bien pensé la retient. »</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── CE QUE JE FAIS ── -->
-    <section class="pb" aria-label="Ce que je produis">
+    <!-- CE QUE JE PRODUIS -->
+    <section class="pb" aria-labelledby="foot-prod">
       <div class="pw">
+
         <div class="pb-header reveal">
           <span class="pb-num">02</span>
-          <h2 class="pb-title">Ce que je <em>produis</em></h2>
+          <h2 class="pb-title" id="foot-prod">Ce que je <em>produis</em></h2>
         </div>
+
         <ul class="feat-list" role="list">
+
           <li class="feat-item reveal">
-            <span class="feat-icon">[ Tactique ]</span>
-            <p class="feat-name">Analyses tactiques</p>
-            <p class="feat-desc">Décryptage de systèmes de jeu, pressing, transitions, blocs défensifs — avec schémas et données.</p>
+            <span class="feat-icon">[ 01 ]</span>
+            <p class="feat-name">Visuels sportifs</p>
+            <p class="feat-desc">
+              Création de visuels modernes et impactants autour du football :
+              scores, affiches de match, compositions et formats adaptés aux réseaux sociaux.
+            </p>
           </li>
+
           <li class="feat-item reveal" style="--reveal-delay:.06s">
-            <span class="feat-icon">[ Design ]</span>
-            <p class="feat-name">Visuels soignés</p>
-            <p class="feat-desc">Infographies, compositions stats, carrousels — un identité graphique cohérente et reconnaissable.</p>
+            <span class="feat-icon">[ 02 ]</span>
+            <p class="feat-name">Design pour réseaux sociaux</p>
+            <p class="feat-desc">
+              Infographies, carrousels et contenus visuels pensés pour capter l’attention
+              et s’intégrer parfaitement dans les formats Instagram, Twitter ou TikTok.
+            </p>
           </li>
+
           <li class="feat-item reveal" style="--reveal-delay:.12s">
-            <span class="feat-icon">[ Actu ]</span>
-            <p class="feat-name">Actualités & réactions</p>
-            <p class="feat-desc">Commentaires à chaud sur les matchs, transferts, polémiques — toujours avec une grille d'analyse.</p>
-          </li>
-          <li class="feat-item reveal" style="--reveal-delay:.18s">
-            <span class="feat-icon">[ Commu ]</span>
-            <p class="feat-name">Community building</p>
-            <p class="feat-desc">Engager, répondre, débattre — une communauté qui revient parce que le contenu vaut le déplacement.</p>
+            <span class="feat-icon">[ 03 ]</span>
+            <p class="feat-name">Contenu visuel autour de l’actualité</p>
+            <p class="feat-desc">
+              Création de visuels liés aux matchs, transferts ou événements marquants,
+              avec une approche rapide et adaptée au rythme des réseaux.
+            </p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- ── MÉDIAS ── -->
-    <section class="pb" aria-label="Visuels">
+    <!-- MÉDIAS -->
+    <section class="pb" aria-labelledby="foot-media">
       <div class="pw">
         <div class="pb-header reveal">
           <span class="pb-num">03</span>
-          <h2 class="pb-title">Aperçu <em>visuel</em></h2>
+          <h2 class="pb-title" id="foot-media">Aperçu <em>visuel</em></h2>
         </div>
-        <div class="media-grid cols-3 reveal" style="--reveal-delay:.07s">
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M1 10h26M10 1v26" stroke="currentColor" stroke-width="1"/></svg>
-              <span>Post — Analyse</span>
-            </div>
+
+        <div class="media-posts reveal" style="--reveal-delay:.07s">
+
+          <!-- ① dammarie.png -->
+          <div class="mp-item">
+            <img
+              src="../public/images/dammarie.png"
+              alt="Publication football — Dammarie"
+              data-lightbox
+              data-caption="Dammarie"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="mp-label">Dammarie</span>
           </div>
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M1 10h26M10 1v26" stroke="currentColor" stroke-width="1"/></svg>
-              <span>Post — Stats</span>
-            </div>
+
+          <!-- ② kvar.png -->
+          <div class="mp-item">
+            <img
+              src="../public/images/kvara.png"
+              alt="Publication football — Kvaratskhelia"
+              data-lightbox
+              data-caption="Kvaratskhelia"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="mp-label">Kvaratskhelia</span>
           </div>
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M1 10h26M10 1v26" stroke="currentColor" stroke-width="1"/></svg>
-              <span>Post — Design</span>
-            </div>
-          </div>
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/></svg>
-              <span>Post — Actu</span>
-            </div>
-          </div>
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/></svg>
-              <span>Post — Tactique</span>
-            </div>
-          </div>
-          <div class="mg-item square">
-            <div class="mg-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="1" y="1" width="26" height="26" rx="4" stroke="currentColor" stroke-width="1.5"/></svg>
-              <span>Post — Carrousel</span>
-            </div>
-          </div>
-        </div>
-        <p class="mg-caption reveal" style="--reveal-delay:.12s">Remplace les placeholders par tes vraies publications</p>
-      </div>
+
+        </div><!-- /.media-posts -->
+      </div><!-- /.pw -->
     </section>
 
   </main>
@@ -208,10 +317,9 @@
       <span class="fn">Maxime Bourgeot</span>
       <span class="fm">Développeur & Créateur · Meslay-le-Vidame</span>
       <a href="#" class="back-top" aria-label="Retour en haut">↑ Retour en haut</a>
-      <span class="fy">© <span id="footer-year">2025</span></span>
+      <span class="fy">© <span id="footer-year">2026</span></span>
     </div>
   </footer>
 
-  <script src="../js/app.js" defer></script>
 </body>
 </html>
